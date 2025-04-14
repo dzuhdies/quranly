@@ -22,26 +22,42 @@ class AdminController extends Controller
 
     public function aturKelas()
     {
-        $kelas = Kelas::with(['murid', 'guru'])->get();
-        $users = User::where('role', '!=', 'admin')->get();
-
-        return view('admin.kelas', compact('kelas', 'users'));
+        $kelas = Kelas::with(['guru', 'murid'])->get();
+        $guruTersedia = User::where('role', 'guru')->get();
+        $muridTersedia = User::where('role', 'murid')->get();
+        
+        return view('admin.kelas', compact('kelas', 'guruTersedia', 'muridTersedia'));
     }
+    
 
     public function tambahKelas(Request $request)
     {
+        $request->validate([
+            'nama_kelas' => 'required|string|max:255|unique:kelas,nama_kelas'
+        ]);
+
         Kelas::create(['nama_kelas' => $request->nama_kelas]);
         return back()->with('success', 'Kelas berhasil ditambahkan.');
     }
 
     public function hapusKelas($id)
     {
-        Kelas::destroy($id);
+        $kelas = Kelas::findOrFail($id);
+        
+        // Hapus relasi kelas dari user
+        User::where('kelas_id', $id)->update(['kelas_id' => null]);
+        
+        $kelas->delete();
+        
         return back()->with('success', 'Kelas berhasil dihapus.');
     }
 
     public function aturTarget(Request $request, $kelasId)
     {
+        $request->validate([
+            'target_halaman' => 'required|integer|min:0'
+        ]);
+
         $kelas = Kelas::findOrFail($kelasId);
         $kelas->target_halaman = $request->target_halaman;
         $kelas->save();
@@ -51,6 +67,12 @@ class AdminController extends Controller
 
     public function resetPencapaian(Request $request)
     {
+        $request->validate([
+            'tipe' => 'required|in:semua,kelas,user',
+            'kelas_id' => 'required_if:tipe,kelas',
+            'user_id' => 'required_if:tipe,user'
+        ]);
+
         if ($request->tipe == 'semua') {
             Pencapaian::truncate();
         } elseif ($request->tipe == 'kelas') {
@@ -66,18 +88,38 @@ class AdminController extends Controller
 
     public function ubahUser(Request $request, $id)
     {
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username,'.$id,
+            'alamat' => 'nullable|string',
+            'password' => 'nullable|string|min:6'
+        ]);
+
         $user = User::findOrFail($id);
-        $user->update($request->only(['nama_lengkap', 'username', 'alamat', 'password']));
+        $data = $request->only(['nama_lengkap', 'username', 'alamat']);
+        
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+
+        $user->update($data);
         return back()->with('success', 'User berhasil diperbarui.');
     }
 
     public function hapusUser($id)
     {
-        User::destroy($id);
+        $user = User::findOrFail($id);
+        $user->delete();
         return back()->with('success', 'User berhasil dihapus.');
     }
+
     public function pindahUserKeKelas(Request $request)
     {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'kelas_id' => 'nullable|exists:kelas,id'
+        ]);
+
         $user = User::findOrFail($request->user_id);
         $user->kelas_id = $request->kelas_id;
         $user->save();
@@ -87,6 +129,10 @@ class AdminController extends Controller
 
     public function searchUser(Request $request)
     {
+        $request->validate([
+            'search' => 'required|string|min:2'
+        ]);
+
         $query = $request->search;
         $users = User::where('nama_lengkap', 'LIKE', "%$query%")
             ->orWhere('username', 'LIKE', "%$query%")
@@ -95,34 +141,57 @@ class AdminController extends Controller
 
         return response()->json($users);
     }
+
     public function lihatSemuaAkun()
     {
-        $users = User::all(); // Termasuk password
-        return view('admin.lihat-akun', compact('users'));
+        $users = User::with('kelas')->get();
+        $kelas = Kelas::all();
+        return view('admin.akun', compact('users'));
     }
 
     public function tambahMuridKeKelas(Request $request, $kelasId)
     {
+        $request->validate([
+            'murid_id' => 'required|array',
+            'murid_id.*' => 'exists:users,id,role,murid'
+        ]);
+
         $kelas = Kelas::findOrFail($kelasId);
-        $muridIds = $request->murid_id; // ID murid yang dipilih
-    
-        // Update kelas_id untuk murid yang dipilih
-        User::whereIn('id', $muridIds)->update(['kelas_id' => $kelasId]);
-    
+        User::whereIn('id', $request->murid_id)->update(['kelas_id' => $kelasId]);
+
         return back()->with('success', 'Murid berhasil ditambahkan ke kelas.');
     }
-    
+
     public function tambahGuruKeKelas(Request $request, $kelasId)
     {
+        $request->validate([
+            'guru_id' => 'required|exists:users,id,role,guru'
+        ]);
+
         $kelas = Kelas::findOrFail($kelasId);
-        $guruIds = (array) $request->guru_id; // pastikan bentuknya array
-    
-        // Update kelas_id untuk guru yang dipilih
-        User::whereIn('id', $guruIds)->update(['kelas_id' => $kelasId]);
-    
+        User::where('id', $request->guru_id)->update(['kelas_id' => $kelasId]);
+
         return back()->with('success', 'Guru berhasil ditambahkan ke kelas.');
     }
-    
-    
 
+    public function buatAkunBaru(Request $request)
+    {
+        $request->validate([
+            'nama_lengkap' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:6',
+            'role' => 'required|in:admin,guru,murid',
+            'kelas_id' => 'nullable|exists:kelas,id'
+        ]);
+
+        $user = User::create([
+            'nama_lengkap' => $request->nama_lengkap,
+            'username' => $request->username,
+            'password' => bcrypt($request->password),
+            'role' => $request->role,
+            'kelas_id' => $request->kelas_id
+        ]);
+
+        return back()->with('success', 'Akun baru berhasil dibuat.');
+    }
 }

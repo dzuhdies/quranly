@@ -13,7 +13,6 @@ class GuruController extends Controller
     {
         $guru = Session::get('user');
 
-        // Total halaman yang telah dibaca oleh guru
         $totalHalamanGuru = Pencapaian::where('user_id', $guru->id)->sum('jumlah_halaman');
 
         $murid = User::where('kelas_id', $guru->kelas_id)->where('role', 'murid')->get();
@@ -34,7 +33,9 @@ class GuruController extends Controller
         // Mengambil pencapaian guru
         $pencapaianGuru = Pencapaian::where('user_id', $guru->id)->get();
 
-        return view('guru.dashboard', compact('data', 'targetHalaman', 'totalHalamanGuru', 'pencapaianGuru'));
+        $nama_kelas = $guru->kelas ? $guru->kelas->nama_kelas : null;
+
+        return view('guru.dashboard', compact('data', 'targetHalaman', 'totalHalamanGuru', 'pencapaianGuru', 'nama_kelas'));
     }
 
 

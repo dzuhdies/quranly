@@ -16,20 +16,25 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/kelas', [AdminController::class, 'kelas'])->name('admin.kelas');
-    Route::post('/assign-murid', [AdminController::class, 'assignMurid']);
-    Route::post('/assign-guru', [AdminController::class, 'assignGuru']);
+
+    // Kelas
+    Route::get('/kelas', [AdminController::class, 'aturKelas'])->name('admin.kelas');
     Route::post('/kelas/tambah', [AdminController::class, 'tambahKelas'])->name('admin.tambahKelas');
     Route::delete('/kelas/hapus/{id}', [AdminController::class, 'hapusKelas'])->name('admin.hapusKelas');
-    Route::get('/pencapaian', [AdminController::class, 'lihatPencapaian']);
-    Route::delete('/pencapaian/hapus', [AdminController::class, 'hapusPencapaian']);
-    Route::post('/kelas/{id}/target', [AdminController::class, 'aturTarget']);
-    Route::get('/admin/akun', [AdminController::class, 'lihatSemuaAkun'])->name('admin.lihatAkun');
+    Route::post('/kelas/{id}/target', [AdminController::class, 'aturTarget'])->name('admin.aturTarget');
+    Route::post('/kelas/{kelasId}/tambah-guru', [AdminController::class, 'tambahGuruKeKelas'])->name('admin.tambahGuruKeKelas');
+    Route::post('/kelas/{kelasId}/tambah-murid', [AdminController::class, 'tambahMuridKeKelas'])->name('admin.tambahMuridKeKelas');
+    Route::post('/akun/tambah', [AdminController::class, 'buatAkunBaru'])->name('admin.buatAkunBaru');
+
+
+    // Pencapaian
+    Route::post('/pencapaian/reset', [AdminController::class, 'resetPencapaian'])->name('admin.resetPencapaian');
+
+    // User
+    Route::get('/akun', [AdminController::class, 'lihatSemuaAkun'])->name('admin.lihatAkun');
+    Route::post('/akun/buat', [AdminController::class, 'buatAkunBaru'])->name('admin.buatAkun');
     Route::put('/user/ubah/{id}', [AdminController::class, 'ubahUser'])->name('admin.ubahUser');
     Route::delete('/user/hapus/{id}', [AdminController::class, 'hapusUser'])->name('admin.hapusUser');
-    Route::post('/admin/kelas/{kelasId}/tambah-guru', [AdminController::class, 'tambahGuruKeKelas'])->name('admin.tambahGuruKeKelas');
-    Route::post('/admin/kelas/{kelasId}/tambah-murid', [AdminController::class, 'tambahMuridKeKelas'])->name('admin.tambahMuridKeKelas');
-
 });
 
 
