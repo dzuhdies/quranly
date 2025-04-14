@@ -194,4 +194,18 @@ class AdminController extends Controller
 
         return back()->with('success', 'Akun baru berhasil dibuat.');
     }
+
+    public function ubahRole(Request $request, $id)
+{
+    $request->validate([
+        'role' => 'required|in:admin,guru,murid'
+    ]);
+
+    $user = User::findOrFail($id);
+    $user->role = $request->role;
+    $user->save();
+
+    return back()->with('success', 'Role berhasil diperbarui.');
+}
+
 }

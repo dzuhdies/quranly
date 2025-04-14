@@ -35,6 +35,8 @@ Route::middleware(['role:admin'])->prefix('admin')->group(function () {
     Route::post('/akun/buat', [AdminController::class, 'buatAkunBaru'])->name('admin.buatAkun');
     Route::put('/user/ubah/{id}', [AdminController::class, 'ubahUser'])->name('admin.ubahUser');
     Route::delete('/user/hapus/{id}', [AdminController::class, 'hapusUser'])->name('admin.hapusUser');
+    // routes/web.php
+    Route::post('/admin/ubah-role/{id}', [AdminController::class, 'ubahRole'])->name('admin.ubahRole');
 });
 
 

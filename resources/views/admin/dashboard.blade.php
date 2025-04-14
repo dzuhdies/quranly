@@ -534,9 +534,9 @@
                 <div class="class-section">
                     <div class="section-title">
                         <span>Murid</span>
-                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahMuridModal{{ $item->id }}">
+                        <!-- <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahMuridModal{{ $item->id }}">
                             <i class="fas fa-plus me-1"></i> Tambah
-                        </button>
+                        </button> -->
                     </div>
                     <div id="muridSection{{ $item->id }}" class="collapsible-section {{ count($item->murid) <= 3 ? 'open' : '' }}">
                         @forelse ($item->murid as $murid)
@@ -590,27 +590,58 @@
                 <input type="text" id="searchAccount" class="form-control" placeholder="Cari akun...">
             </div>
 
-            <div id="accountList">
-                @foreach($users as $user)
-                <div class="account-card" onclick="showAccountDetail({{ $user->id }})">
-                    <div class="account-avatar">{{ substr($user->nama_lengkap, 0, 1) }}</div>
-                    <div class="account-info">
-                        <div class="account-name">{{ $user->nama_lengkap }}</div>
-                        <div class="account-username">{{ $user->username }}</div>
-                        <div class="account-username">password : {{ $user->password }}</div>
-                    </div>
-                    <div class="account-role {{ $user->role }}">{{ ucfirst($user->role) }}</div>
-                </div>
-                @endforeach
-            </div>
+            <!-- Account Section -->
+<div class="account-section">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Daftar Akun</h5>
+        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahAkunModal">
+            <i class="fas fa-plus me-1"></i> Tambah Akun
+        </button>
+    </div>
 
-            @if(count($users) == 0)
-            <div class="empty-state">
-                <i class="fas fa-user-slash d-block"></i>
-                <p class="mb-0" style="font-size: 13px;">Belum ada akun</p>
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchAccount" class="form-control" placeholder="Cari akun...">
+    </div>
+
+    <div id="accountList">
+        @foreach($users as $user)
+        <div class="account-card">
+            <div class="account-avatar">{{ substr($user->nama_lengkap, 0, 1) }}</div>
+            <div class="account-info">
+                <div class="account-name">{{ $user->nama_lengkap }}</div>
+                <div class="account-username">{{ $user->username }}</div>
+                <div class="account-password">Password : {{ $user->password }}</div>
+                
+                <!-- Form untuk mengubah role -->
+                <form action="{{ route('admin.ubahRole', $user->id) }}" method="POST">
+                    @csrf
+                    @method('POST')
+                    <div class="account-role">
+                        <select class="form-select form-select-sm" name="role" onchange="this.form.submit()">
+                            <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="guru" {{ $user->role == 'guru' ? 'selected' : '' }}>Guru</option>
+                            <option value="murid" {{ $user->role == 'murid' ? 'selected' : '' }}>Murid</option>
+                        </select>
+                    </div>
+                </form>
             </div>
-            @endif
         </div>
+        @endforeach
+    </div>
+</div>
+
+            </div>
+        </div>
+
+
+        @if(count($users) == 0)
+        <div class="empty-state">
+            <i class="fas fa-user-slash d-block"></i>
+            <p class="mb-0" style="font-size: 13px;">Belum ada akun</p>
+        </div>
+        @endif
+    </div>
     </div>
 
     <!-- FAB Button -->
@@ -684,43 +715,6 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Tambah Guru</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    @endforeach
-
-    <!-- Modal Tambah Murid -->
-    @foreach ($kelas as $item)
-    <div class="modal fade" id="tambahMuridModal{{ $item->id }}" tabindex="-1" aria-labelledby="tambahMuridModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form action="{{ route('admin.tambahMuridKeKelas', $item->id) }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="tambahMuridModalLabel">Tambah Murid ke Kelas {{ $item->nama_kelas }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="murid_id{{ $item->id }}" class="form-label">Pilih Murid</label>
-                            <select class="form-select" name="murid_id" id="murid_id{{ $item->id }}" required>
-                                <option value="">-- Pilih Murid --</option>
-                                @foreach ($users->where('role', 'murid') as $user)
-                                <option value="{{ $user->id }}">{{ $user->nama_lengkap }} ({{ $user->username }})</option>
-                                @endforeach
-                            </select>
-
-                            @foreach ($users->where('role', 'murid') as $user)
-                            <option value="{{ $user->id }}">{{ $user->nama_lengkap }} ({{ $user->username }})</option>
-                            @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Tambah Murid</button>
                     </div>
                 </form>
             </div>
