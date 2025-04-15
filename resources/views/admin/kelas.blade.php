@@ -9,6 +9,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <!-- Tambahkan jQuery sebelum Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -18,10 +20,6 @@
             <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left me-2"></i> Kembali
             </a>
-
-            <!-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahKelasModal">
-                <i class="fas fa-plus me-2"></i>Tambah Kelas
-            </button> -->
         </div>
 
         @if (session('success'))
@@ -48,24 +46,6 @@
                                     <strong>{{ $kelasItem->nama_kelas }}</strong>
                                     <div class="text-muted small">ID: {{ $kelasItem->id }}</div>
                                 </td>
-                                <!-- <td>
-                                    @forelse ($kelasItem->guru as $guru)
-                                    <div class="d-flex align-items-center mb-2">
-                                        <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
-                                            {{ substr($guru->nama_lengkap, 0, 1) }}
-                                        </div>
-                                        <div>
-                                            <div>{{ $guru->nama_lengkap }}</div>
-                                            <small class="text-muted">{{ $guru->username }}</small>
-                                        </div>
-                                    </div>
-                                    @empty
-                                    <span class="text-muted">Belum ada guru</span>
-                                    @endforelse
-                                    <button class="btn btn-sm btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#tambahGuruModal{{ $kelasItem->id }}">
-                                        <i class="fas fa-plus me-1"></i> Tambah Guru
-                                    </button>
-                                </td> -->
                                 <td>
                                     @forelse ($kelasItem->murid as $murid)
                                     <div class="d-flex align-items-center mb-2">
@@ -80,34 +60,12 @@
                                     @empty
                                     <span class="text-muted">Belum ada murid</span>
                                     @endforelse
-                                    <button class="btn btn-sm btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#tambahMuridModal{{ $kelasItem->id }}">
+                                    <button class="btn btn-sm btn-outline-primary mt-2 tambah-murid-btn" 
+                                            data-kelas-id="{{ $kelasItem->id }}" 
+                                            data-kelas-nama="{{ $kelasItem->nama_kelas }}">
                                         <i class="fas fa-plus me-1"></i> Tambah Murid
                                     </button>
                                 </td>
-                                <!-- <td>
-                                    <form class="d-flex align-items-center gap-2" action="{{ route('admin.aturTarget', $kelasItem->id) }}" method="POST">
-                                        @csrf
-                                        <input type="number" class="form-control form-control-sm" name="target_halaman"
-                                            value="{{ $kelasItem->target_halaman ?? 0 }}" min="0" style="width: 80px;">
-                                        <button type="submit" class="btn btn-sm btn-success" title="Simpan Target">
-                                            <i class="fas fa-save"></i>
-                                        </button>
-                                    </form>
-                                </td> -->
-                                <!-- <td>
-                                    <div class="d-flex gap-2">
-                                        <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editKelasModal{{ $kelasItem->id }}">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <form action="{{ route('admin.hapusKelas', $kelasItem->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus kelas ini?')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td> -->
                             </tr>
                             @empty
                             <tr>
@@ -121,105 +79,85 @@
         </div>
     </div>
 
-    <!-- Modal Tambah Kelas -->
-    <div class="modal fade" id="tambahKelasModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="{{ route('admin.tambahKelas') }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tambah Kelas Baru</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="nama_kelas" class="form-label">Nama Kelas</label>
-                            <input type="text" class="form-control" id="nama_kelas" name="nama_kelas" required>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </div>
-                </form>
-            </div>
+    <!-- Bottom Sheet Tambah Murid -->
+    <div id="bottomSheetOverlay" class="position-fixed top-0 start-0 end-0 bottom-0 bg-dark bg-opacity-50 d-none" style="z-index: 1040;"></div>
+    
+    <div id="bottomSheet" class="position-fixed bottom-0 start-0 end-0 bg-white shadow-lg rounded-top-3 p-4 d-none" style="z-index: 1050; max-height: 80vh; overflow-y: auto; transition: transform 0.3s ease-out; transform: translateY(100%);">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="mb-0" id="bottomSheetTitle">Tambah Murid</h5>
+            <button class="btn btn-sm btn-outline-secondary" onclick="closeBottomSheet()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-    </div>
-
-    <!-- Modal Tambah Guru -->
-    @foreach ($kelas as $kelasItem)
-    <div class="modal fade" id="tambahGuruModal{{ $kelasItem->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="{{ route('admin.tambahGuruKeKelas', $kelasItem->id) }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tambah Guru ke {{ $kelasItem->nama_kelas }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="guru_id{{ $kelasItem->id }}" class="form-label">Pilih Guru</label>
-                            <select class="form-select" id="guru_id{{ $kelasItem->id }}" name="guru_id" required>
-                                <option value="">-- Pilih Guru --</option>
-                                @foreach ($guruTersedia as $guru)
-                                <option value="{{ $guru->id }}">{{ $guru->nama_lengkap }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Tambah Guru</button>
-                    </div>
-                </form>
+        <form id="bottomSheetForm" method="POST">
+            @csrf
+            <div class="mb-3">
+                <label for="murid_id" class="form-label">Pilih Murid</label>
+                <select class="form-select select2-multiple" id="murid_id" name="murid_id[]" multiple required>
+                    @foreach ($muridTersedia as $murid)
+                    <option value="{{ $murid->id }}">{{ $murid->nama_lengkap }}</option>
+                    @endforeach
+                </select>
             </div>
-        </div>
-    </div>
-    @endforeach
-
-    <!-- Modal Tambah Murid -->
-    @foreach ($kelas as $kelasItem)
-    <div class="modal fade" id="tambahMuridModal{{ $kelasItem->id }}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="{{ route('admin.tambahMuridKeKelas', $kelasItem->id) }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tambah Murid ke {{ $kelasItem->nama_kelas }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="murid_id{{ $kelasItem->id }}" class="form-label">Pilih Murid</label>
-                            <select class="form-select select2-multiple" id="murid_id{{ $kelasItem->id }}"
-                                name="murid_id[]" multiple="multiple" required>
-                                @foreach ($muridTersedia as $murid)
-                                <option value="{{ $murid->id }}">{{ $murid->nama_lengkap }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Tambah Murid</button>
-                    </div>
-                </form>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-secondary me-2" onclick="closeBottomSheet()">Batal</button>
+                <button type="submit" class="btn btn-primary">Tambah Murid</button>
             </div>
-        </div>
+        </form>
     </div>
-    @endforeach
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            // Inisialisasi Select2
             $('.select2-multiple').select2({
                 placeholder: "Pilih murid",
                 allowClear: true,
                 width: '100%'
             });
+            
+            // Event handler untuk tombol tambah murid
+            $(document).on('click', '.tambah-murid-btn', function() {
+                const kelasId = $(this).data('kelas-id');
+                const kelasNama = $(this).data('kelas-nama');
+                openBottomSheet(kelasId, kelasNama);
+            });
+            
+            // Tutup bottom sheet saat klik overlay
+            $('#bottomSheetOverlay').click(function() {
+                closeBottomSheet();
+            });
         });
+
+        function openBottomSheet(kelasId, namaKelas) {
+            // Tampilkan overlay dan bottom sheet
+            $('#bottomSheetOverlay').removeClass('d-none');
+            $('#bottomSheet').removeClass('d-none');
+            
+            // Update judul & action form
+            $('#bottomSheetTitle').text(`Tambah Murid ke ${namaKelas}`);
+            $('#bottomSheetForm').attr('action', `/admin/kelas/${kelasId}/tambah-murid`);
+            
+            // Reset select2
+            $('#murid_id').val(null).trigger('change');
+            
+            // Animasikan muncul
+            setTimeout(() => {
+                $('#bottomSheet').css('transform', 'translateY(0)');
+            }, 10);
+        }
+
+        function closeBottomSheet() {
+            // Animasikan hilang
+            $('#bottomSheet').css('transform', 'translateY(100%)');
+            
+            // Sembunyikan setelah animasi selesai
+            setTimeout(() => {
+                $('#bottomSheet').addClass('d-none');
+                $('#bottomSheetOverlay').addClass('d-none');
+            }, 300);
+        }
     </script>
 </body>
 

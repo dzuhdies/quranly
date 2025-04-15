@@ -252,27 +252,25 @@
 
 <body>
     <!-- Navbar -->
+    <!-- Navbar -->
     <nav class="navbar navbar-dark mb-4">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center w-100">
-                @isset($guru)
                 <span class="navbar-brand">
                     <i class="bi bi-person-circle me-2"></i>
-                    {{ $guru->nama_lengkap }}
+                    {{ $nama_lengkap }} <!-- Memanggil nama lengkap langsung -->
                 </span>
-                @else
-                <span class="navbar-brand">
-                    <i class="bi bi-person-circle me-2"></i>
-                    Guru
-                </span>
-                @endisset
 
-                <a href="{{ route('logout') }}" class="btn btn-sm btn-light">
+                <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-sm btn-light">
                     <i class="bi bi-box-arrow-right me-1"></i> Logout
-                </a>
+                </button>
+            </form>
             </div>
         </div>
     </nav>
+
 
     <div class="container mb-5 pb-3">
         <!-- Header Card -->

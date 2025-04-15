@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,20 +17,20 @@
             --danger: #EF4444;
             --light-gray: #F1F5F9;
         }
-        
+
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: #F8FAFC;
             color: #334155;
             padding-bottom: 80px;
         }
-        
+
         .navbar {
             background-color: var(--primary);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             padding: 16px 0;
         }
-        
+
         .navbar-brand {
             font-weight: 600;
             font-size: 1.1rem;
@@ -43,7 +44,7 @@
             border: 1px solid rgba(255, 255, 255, 0.6);
             transition: all 0.2s;
         }
-        
+
         .logout-btn:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -55,7 +56,7 @@
             color: var(--dark);
             font-size: 1.8rem;
         }
-        
+
         .stats-card {
             background: white;
             border-radius: 16px;
@@ -65,13 +66,13 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .total-pages {
             text-align: center;
             position: relative;
             padding: 20px 0;
         }
-        
+
         .total-count {
             font-size: 60px;
             font-weight: 800;
@@ -80,14 +81,14 @@
             margin: 0;
             animation: countUp 1s ease-out;
         }
-        
+
         .total-label {
             font-size: 16px;
             color: #64748B;
             margin-top: 5px;
             font-weight: 500;
         }
-        
+
         .target-info {
             display: flex;
             justify-content: space-between;
@@ -97,31 +98,31 @@
             border-radius: 12px;
             align-items: center;
         }
-        
+
         .target-label {
             font-weight: 600;
             margin: 0;
         }
-        
+
         .target-value {
             font-weight: 700;
             color: var(--dark);
             font-size: 22px;
             margin: 0;
         }
-        
+
         .progress {
             height: 12px;
             border-radius: 6px;
             margin: 15px 0;
             background-color: #E2E8F0;
         }
-        
+
         .progress-bar {
             border-radius: 6px;
             transition: width 1.2s ease;
         }
-        
+
         .status-badge {
             padding: 8px 16px;
             border-radius: 20px;
@@ -130,17 +131,17 @@
             display: inline-block;
             margin-bottom: 15px;
         }
-        
+
         .status-target-achieved {
             background-color: rgba(16, 185, 129, 0.1);
             color: var(--success);
         }
-        
+
         .status-target-not-achieved {
             background-color: rgba(239, 68, 68, 0.1);
             color: var(--danger);
         }
-        
+
         .section-title {
             font-size: 18px;
             font-weight: 600;
@@ -149,12 +150,12 @@
             display: flex;
             align-items: center;
         }
-        
+
         .section-title i {
             margin-right: 8px;
             color: var(--primary);
         }
-        
+
         .form-container {
             background: white;
             border-radius: 16px;
@@ -162,23 +163,23 @@
             margin-bottom: 20px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
-        
+
         .form-label {
             font-weight: 500;
             color: #475569;
         }
-        
+
         .form-control {
             border-radius: 8px;
             padding: 12px;
             border: 1px solid #CBD5E1;
         }
-        
+
         .form-control:focus {
             border-color: var(--primary-light);
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
         }
-        
+
         .btn-primary {
             background-color: var(--primary);
             border: none;
@@ -187,12 +188,12 @@
             font-weight: 600;
             transition: all 0.2s;
         }
-        
+
         .btn-primary:hover {
             background-color: #4338CA;
             transform: translateY(-1px);
         }
-        
+
         .table-container {
             background: white;
             border-radius: 16px;
@@ -200,11 +201,11 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
         }
-        
+
         .table {
             margin-bottom: 0;
         }
-        
+
         .table th {
             background-color: #F1F5F9;
             color: #475569;
@@ -212,44 +213,44 @@
             padding: 14px 20px;
             font-size: 14px;
         }
-        
+
         .table td {
             padding: 14px 20px;
             vertical-align: middle;
             font-size: 14px;
         }
-        
+
         .table-striped tbody tr:nth-of-type(odd) {
             background-color: #FAFAFA;
         }
-        
+
         .btn-sm {
             padding: 6px 14px;
             font-size: 13px;
             border-radius: 6px;
         }
-        
+
         .btn-danger {
             background-color: var(--danger);
             border: none;
         }
-        
+
         .btn-danger:hover {
             background-color: #DC2626;
         }
-        
+
         .alert {
             border-radius: 12px;
             margin-bottom: 20px;
             padding: 16px;
             font-weight: 500;
         }
-        
+
         hr {
             margin: 30px 0;
             opacity: 0.1;
         }
-        
+
         .tab-navigation {
             display: flex;
             position: fixed;
@@ -260,7 +261,7 @@
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
             z-index: 100;
         }
-        
+
         .tab-item {
             flex: 1;
             text-align: center;
@@ -271,28 +272,29 @@
             text-decoration: none;
             transition: all 0.2s;
         }
-        
+
         .tab-item.active {
             color: var(--primary);
         }
-        
+
         .tab-item i {
             display: block;
             font-size: 20px;
             margin-bottom: 4px;
         }
-        
+
         @keyframes countUp {
             from {
                 transform: translateY(20px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
             }
         }
-        
+
         /* Floating Action Button */
         .fab {
             position: fixed;
@@ -312,30 +314,30 @@
             z-index: 99;
             transition: all 0.3s;
         }
-        
+
         .fab:hover {
             transform: scale(1.1);
             background-color: #4338CA;
         }
-        
+
         /* Hide/show sections */
         .dashboard-section {
             display: block;
         }
-        
+
         .history-section {
             display: none;
         }
-        
+
         @media (max-width: 576px) {
             .total-count {
                 font-size: 48px;
             }
-            
+
             .navbar {
                 padding: 12px 0;
             }
-            
+
             .app-title {
                 font-size: 1.5rem;
             }
@@ -347,9 +349,13 @@
     <nav class="navbar navbar-dark">
         <div class="container">
             <span class="navbar-brand">Halo, {{ $user->nama_lengkap }}</span>
-            <a href="{{ route('logout') }}" class="btn btn-outline-light logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-outline-light logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
+
         </div>
     </nav>
 
@@ -446,7 +452,7 @@
         {{-- History Section --}}
         <div id="history-section" class="history-section">
             <h1 class="app-title">Riwayat Pencapaian</h1>
-            
+
             {{-- Tabel Pencapaian Sendiri --}}
             <div class="table-container">
                 <table class="table">
@@ -534,7 +540,7 @@
             if (section === 'dashboard') {
                 document.getElementById('dashboard-section').style.display = 'block';
                 document.getElementById('history-section').style.display = 'none';
-                
+
                 // Update active tab
                 document.querySelectorAll('.tab-item').forEach(item => {
                     item.classList.remove('active');
@@ -543,7 +549,7 @@
             } else if (section === 'history') {
                 document.getElementById('dashboard-section').style.display = 'none';
                 document.getElementById('history-section').style.display = 'block';
-                
+
                 // Update active tab
                 document.querySelectorAll('.tab-item').forEach(item => {
                     item.classList.remove('active');
@@ -551,9 +557,9 @@
                 document.querySelectorAll('.tab-item')[1].classList.add('active');
             }
         }
-        
+
         // Jika ada notifikasi sukses, tutup modal secara otomatis
-        @if (session('success'))
+        @if(session('success'))
         document.addEventListener('DOMContentLoaded', function() {
             var modal = bootstrap.Modal.getInstance(document.getElementById('tambahPencapaianModal'));
             if (modal) {
@@ -563,4 +569,5 @@
         @endif
     </script>
 </body>
+
 </html>

@@ -457,11 +457,16 @@
     <nav class="navbar navbar-dark mb-3">
         <div class="container">
             <span class="navbar-brand">Manajemen Kelas</span>
-            <a href="{{ route('logout') }}" class="btn btn-outline-light logout-btn">
-                <i class="fas fa-sign-out-alt"></i>
-            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                @csrf
+                <button type="submit" class="btn btn-outline-light logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </form>
+
         </div>
     </nav>
+
 
     <div class="container mb-4">
         @if (session('success'))
@@ -590,57 +595,42 @@
                 <input type="text" id="searchAccount" class="form-control" placeholder="Cari akun...">
             </div>
 
-            <!-- Account Section -->
-<div class="account-section">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">Daftar Akun</h5>
-        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahAkunModal">
-            <i class="fas fa-plus me-1"></i> Tambah Akun
-        </button>
-    </div>
+            <div id="accountList">
+                @foreach($users as $user)
+                <div class="account-card">
+                    <div class="account-avatar">{{ substr($user->nama_lengkap, 0, 1) }}</div>
+                    <div class="account-info">
+                        <div class="account-name">{{ $user->nama_lengkap }}</div>
+                        <div class="account-username">{{ $user->username }}</div>
+                        <div class="account-password">Password : {{ $user->password }}</div>
 
-    <div class="search-box">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchAccount" class="form-control" placeholder="Cari akun...">
-    </div>
-
-    <div id="accountList">
-        @foreach($users as $user)
-        <div class="account-card">
-            <div class="account-avatar">{{ substr($user->nama_lengkap, 0, 1) }}</div>
-            <div class="account-info">
-                <div class="account-name">{{ $user->nama_lengkap }}</div>
-                <div class="account-username">{{ $user->username }}</div>
-                <div class="account-password">Password : {{ $user->password }}</div>
-                
-                <!-- Form untuk mengubah role -->
-                <form action="{{ route('admin.ubahRole', $user->id) }}" method="POST">
-                    @csrf
-                    @method('POST')
-                    <div class="account-role">
-                        <select class="form-select form-select-sm" name="role" onchange="this.form.submit()">
-                            <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                            <option value="guru" {{ $user->role == 'guru' ? 'selected' : '' }}>Guru</option>
-                            <option value="murid" {{ $user->role == 'murid' ? 'selected' : '' }}>Murid</option>
-                        </select>
+                        <!-- Form untuk mengubah role -->
+                        <form action="{{ route('admin.ubahRole', $user->id) }}" method="POST">
+                            @csrf
+                            @method('POST')
+                            <div class="account-role">
+                                <select class="form-select form-select-sm" name="role" onchange="this.form.submit()">
+                                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                                    <option value="guru" {{ $user->role == 'guru' ? 'selected' : '' }}>Guru</option>
+                                    <option value="murid" {{ $user->role == 'murid' ? 'selected' : '' }}>Murid</option>
+                                </select>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
+                @endforeach
             </div>
         </div>
-        @endforeach
     </div>
-</div>
-
-            </div>
-        </div>
+    </div>
 
 
-        @if(count($users) == 0)
-        <div class="empty-state">
-            <i class="fas fa-user-slash d-block"></i>
-            <p class="mb-0" style="font-size: 13px;">Belum ada akun</p>
-        </div>
-        @endif
+    @if(count($users) == 0)
+    <div class="empty-state">
+        <i class="fas fa-user-slash d-block"></i>
+        <p class="mb-0" style="font-size: 13px;">Belum ada akun</p>
+    </div>
+    @endif
     </div>
     </div>
 
