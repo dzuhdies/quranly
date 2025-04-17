@@ -11,6 +11,39 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
     <!-- Tambahkan jQuery sebelum Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+                .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #64748B;
+            text-decoration: none;
+            font-size: 12px;
+            padding: 5px 0;
+        }
+
+        .bottom-nav-item.active {
+            color: var(--primary);
+        }
+
+        .bottom-nav-item i {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+    </style>
 </head>
 
 <body>
@@ -78,6 +111,7 @@
             </div>
         </div>
     </div>
+    <br><br><br><br><br>
 
     <!-- Bottom Sheet Tambah Murid -->
     <div id="bottomSheetOverlay" class="position-fixed top-0 start-0 end-0 bottom-0 bg-dark bg-opacity-50 d-none" style="z-index: 1040;"></div>

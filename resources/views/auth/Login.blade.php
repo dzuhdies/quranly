@@ -15,36 +15,48 @@
         
         body {
             background-color: #f5f5f5;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
         
         .container {
-            width: 400px;
+            width: 100%;
+            max-width: 400px;
             background: white;
             border-radius: 12px;
-            padding: 35px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 
-                        0 5px 15px rgba(0, 0, 0, 0.04);
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 
+                        0 3px 10px rgba(0, 0, 0, 0.04);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12), 
-                        0 10px 20px rgba(0, 0, 0, 0.08);
+        @media (min-width: 768px) {
+            .container {
+                padding: 35px;
+            }
+            
+            .container:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12), 
+                            0 10px 20px rgba(0, 0, 0, 0.08);
+            }
+            
+            .container:hover .header h2::after {
+                transform: scaleX(1);
+            }
         }
         
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         .header h2 {
             color: #000;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 600;
             position: relative;
             display: inline-block;
@@ -62,18 +74,14 @@
             transition: transform 0.4s ease;
         }
         
-        .container:hover .header h2::after {
-            transform: scaleX(1);
-        }
-        
         .header p {
             color: #666;
-            margin-top: 15px;
-            font-size: 15px;
+            margin-top: 10px;
+            font-size: 14px;
         }
         
         .form-group {
-            margin-bottom: 22px;
+            margin-bottom: 18px;
             position: relative;
         }
         
@@ -83,15 +91,16 @@
             left: 15px;
             color: #000;
             transition: color 0.3s ease;
+            font-size: 14px;
         }
         
         .form-control {
             width: 100%;
-            height: 50px;
+            height: 45px;
             border: 2px solid #e1e1e1;
             border-radius: 8px;
-            padding: 0 15px 0 45px;
-            font-size: 16px;
+            padding: 0 15px 0 40px;
+            font-size: 15px;
             color: #333;
             transition: all 0.3s ease;
             background-color: #fbfbfb;
@@ -120,33 +129,35 @@
         .remember-me {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .remember-me input {
-            margin-right: 10px;
+            margin-right: 8px;
             accent-color: #000;
+            width: 16px;
+            height: 16px;
         }
         
         .remember-me label {
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
         }
         
         .btn {
             width: 100%;
-            height: 50px;
+            height: 45px;
             background: #000;
             border: none;
             border-radius: 8px;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
         
         .btn::after {
@@ -154,8 +165,8 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             transform: translate(-50%, -50%) scale(0);
@@ -167,15 +178,15 @@
         }
         
         .btn:active::after {
-            transform: translate(-50%, -50%) scale(20);
+            transform: translate(-50%, -50%) scale(15);
             opacity: 0;
         }
         
         .footer {
             text-align: center;
-            margin-top: 25px;
+            margin-top: 20px;
             color: #666;
-            font-size: 14px;
+            font-size: 13px;
         }
         
         .footer a {
@@ -206,13 +217,13 @@
         
         .forgot-password {
             text-align: right;
-            margin-top: -12px;
-            margin-bottom: 20px;
+            margin-top: -10px;
+            margin-bottom: 15px;
         }
         
         .forgot-password a {
             color: #666;
-            font-size: 13px;
+            font-size: 12px;
             text-decoration: none;
             transition: color 0.3s ease;
         }
@@ -272,3 +283,5 @@
             Belum punya akun? <a href="{{ route('register') }}">Daftar disini</a>
         </div>
     </div>
+</body>
+</html>

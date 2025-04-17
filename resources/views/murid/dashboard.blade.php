@@ -320,7 +320,6 @@
             background-color: #4338CA;
         }
 
-        /* Hide/show sections */
         .dashboard-section {
             display: block;
         }
@@ -348,7 +347,7 @@
 <body>
     <nav class="navbar navbar-dark">
         <div class="container">
-            <span class="navbar-brand">Halo, {{ $user->nama_lengkap }}</span>
+            <span class="navbar-brand">Quranly</span>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                 @csrf
                 <button type="submit" class="btn btn-outline-light logout-btn">
@@ -360,11 +359,8 @@
     </nav>
 
     <div class="container">
-        {{-- Dashboard Section --}}
         <div id="dashboard-section" class="dashboard-section">
-            <h1 class="app-title">Quranly</h1>
-
-            {{-- Notifikasi --}}
+            <h1 class="app-title">Halo, {{ $user->nama_lengkap }}</h1>
             @if (session('success'))
             <div class="alert alert-success">
                 <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
@@ -374,25 +370,20 @@
                 <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
             </div>
             @endif
-
-            {{-- Stats Card dengan Total Halaman yang Menonjol --}}
             <div class="stats-card">
                 <div class="total-pages">
                     <h1 class="total-count">{{ $totalHalaman }}</h1>
                     <p class="total-label">Total Halaman Dibaca</p>
                 </div>
 
-                {{-- Target Info --}}
                 <div class="target-info">
                     <div>
-                        <p class="target-label">Target Kelas</p>
+                        <p class="target-label">Target Kelas {{ $user->nama_kelas }}</p>
                     </div>
                     <div>
                         <p class="target-value">{{ $targetHalaman }}</p>
                     </div>
                 </div>
-
-                {{-- Status Badge --}}
                 <div class="text-center">
                     @if ($sudahMencapaiTarget)
                     <span class="status-badge status-target-achieved">
@@ -404,8 +395,6 @@
                     </span>
                     @endif
                 </div>
-
-                {{-- Progress Bar --}}
                 @php
                 $persentase = min(100, ($targetHalaman > 0 ? ($totalHalaman / $targetHalaman * 100) : 0));
                 @endphp
@@ -420,8 +409,6 @@
                     <small class="text-muted">{{ round($persentase) }}% dari target</small>
                 </div>
             </div>
-
-            {{-- Tabel Teman Sekelas --}}
             <h3 class="section-title">
                 <i class="fas fa-users"></i> Total Pencapaian Teman Sekelas
             </h3>
@@ -448,12 +435,8 @@
                 </table>
             </div>
         </div>
-
-        {{-- History Section --}}
         <div id="history-section" class="history-section">
             <h1 class="app-title">Riwayat Pencapaian</h1>
-
-            {{-- Tabel Pencapaian Sendiri --}}
             <div class="table-container">
                 <table class="table">
                     <thead>
@@ -488,13 +471,9 @@
             </div>
         </div>
     </div>
-
-    {{-- Floating Action Button untuk Tambah Pencapaian --}}
     <div class="fab" data-bs-toggle="modal" data-bs-target="#tambahPencapaianModal">
         <i class="fas fa-plus"></i>
     </div>
-
-    {{-- Modal Tambah Pencapaian --}}
     <div class="modal fade" id="tambahPencapaianModal" tabindex="-1" aria-labelledby="tambahPencapaianModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -520,8 +499,6 @@
             </div>
         </div>
     </div>
-
-    {{-- Bottom Navigation --}}
     <div class="tab-navigation">
         <a href="#" class="tab-item active" onclick="showSection('dashboard')">
             <i class="fas fa-home"></i>
@@ -535,13 +512,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Fungsi untuk menampilkan section yang dipilih
         function showSection(section) {
             if (section === 'dashboard') {
                 document.getElementById('dashboard-section').style.display = 'block';
                 document.getElementById('history-section').style.display = 'none';
-
-                // Update active tab
                 document.querySelectorAll('.tab-item').forEach(item => {
                     item.classList.remove('active');
                 });
@@ -549,16 +523,12 @@
             } else if (section === 'history') {
                 document.getElementById('dashboard-section').style.display = 'none';
                 document.getElementById('history-section').style.display = 'block';
-
-                // Update active tab
                 document.querySelectorAll('.tab-item').forEach(item => {
                     item.classList.remove('active');
                 });
                 document.querySelectorAll('.tab-item')[1].classList.add('active');
             }
         }
-
-        // Jika ada notifikasi sukses, tutup modal secara otomatis
         @if(session('success'))
         document.addEventListener('DOMContentLoaded', function() {
             var modal = bootstrap.Modal.getInstance(document.getElementById('tambahPencapaianModal'));

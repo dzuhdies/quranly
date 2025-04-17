@@ -6,8 +6,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\MuridController;
 
-
-Route::get('/', [AuthController::class, 'showLogin'])->name('login');
+Route::get('/',function (){return view('splash');});
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
@@ -16,8 +16,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
-    // Kelas
     Route::get('/kelas', [AdminController::class, 'aturKelas'])->name('admin.kelas');
     Route::post('/kelas/tambah', [AdminController::class, 'tambahKelas'])->name('admin.tambahKelas');
     Route::delete('/kelas/hapus/{id}', [AdminController::class, 'hapusKelas'])->name('admin.hapusKelas');
@@ -25,17 +23,11 @@ Route::middleware(['role:admin'])->prefix('admin')->group(function () {
     Route::post('/kelas/{kelasId}/tambah-guru', [AdminController::class, 'tambahGuruKeKelas'])->name('admin.tambahGuruKeKelas');
     Route::post('/kelas/{kelasId}/tambah-murid', [AdminController::class, 'tambahMuridKeKelas'])->name('admin.tambahMuridKeKelas');
     Route::post('/akun/tambah', [AdminController::class, 'buatAkunBaru'])->name('admin.buatAkunBaru');
-
-
-    // Pencapaian
     Route::post('/pencapaian/reset', [AdminController::class, 'resetPencapaian'])->name('admin.resetPencapaian');
-
-    // User
     Route::get('/akun', [AdminController::class, 'lihatSemuaAkun'])->name('admin.lihatAkun');
     Route::post('/akun/buat', [AdminController::class, 'buatAkunBaru'])->name('admin.buatAkun');
     Route::put('/user/ubah/{id}', [AdminController::class, 'ubahUser'])->name('admin.ubahUser');
     Route::delete('/user/hapus/{id}', [AdminController::class, 'hapusUser'])->name('admin.hapusUser');
-    // routes/web.php
     Route::post('/admin/ubah-role/{id}', [AdminController::class, 'ubahRole'])->name('admin.ubahRole');
 });
 

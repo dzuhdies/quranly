@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Guru</title>
-    <!-- Bootstrap 5 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <!-- Bootstrap icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css">
     <style>
         :root {
@@ -251,14 +249,12 @@
 </head>
 
 <body>
-    <!-- Navbar -->
-    <!-- Navbar -->
     <nav class="navbar navbar-dark mb-4">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center w-100">
                 <span class="navbar-brand">
                     <i class="bi bi-person-circle me-2"></i>
-                    {{ $nama_lengkap }} <!-- Memanggil nama lengkap langsung -->
+                    {{ $nama_lengkap }}
                 </span>
 
                 <form action="{{ route('logout') }}" method="POST" class="d-inline">
@@ -273,7 +269,6 @@
 
 
     <div class="container mb-5 pb-3">
-        <!-- Header Card -->
         <div class="header-card">
             <h5>Kelas</h5>
             <h2>{{ $nama_kelas ?? 'Tidak ada kelas' }}</h2>
@@ -304,9 +299,7 @@
             </li>
         </ul>
 
-        <!-- Tab Content -->
         <div class="tab-content" id="dashboardTabsContent">
-            <!-- Students Tab -->
             <div class="tab-pane fade show active" id="students" role="tabpanel" aria-labelledby="students-tab">
                 <div class="row">
                     @foreach ($data as $item)
@@ -340,9 +333,7 @@
                 </div>
             </div>
 
-            <!-- Achievements Tab -->
             <div class="tab-pane fade" id="achievements" role="tabpanel" aria-labelledby="achievements-tab">
-                <!-- Add Achievement Form -->
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span>Tambah Pencapaian</span>
@@ -366,7 +357,6 @@
                     </div>
                 </div>
 
-                <!-- Achievement List -->
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span>Riwayat Pencapaian</span>
@@ -407,15 +397,10 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialize tooltips
         document.addEventListener('DOMContentLoaded', function() {
-            // Get all tabs
             var triggerTabList = [].slice.call(document.querySelectorAll('#dashboardTabs button'))
-
-            // Handle tab switching
             triggerTabList.forEach(function(triggerEl) {
                 var tabTrigger = new bootstrap.Tab(triggerEl)
 

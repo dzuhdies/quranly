@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Murid - {{ $murid->nama_lengkap }}</title>
-    <!-- Bootstrap 5 -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    <!-- Bootstrap icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css">
     <style>
         :root {
@@ -178,7 +177,6 @@
             to { opacity: 1; }
         }
         
-        /* Mobile specific styles */
         @media (max-width: 768px) {
             .container {
                 padding-left: 1rem;
@@ -207,7 +205,6 @@
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-dark mb-4">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center w-100">
@@ -223,20 +220,15 @@
                 </span>
                 @endisset
                 
-                <a href="{{ route('logout') }}" class="btn btn-sm btn-light">
-                    <i class="bi bi-box-arrow-right me-1"></i> Logout
-                </a>
             </div>
         </div>
     </nav>
 
     <div class="container mb-5 pb-3">
-        <!-- Back Button -->
         <a href="{{ route('guru.dashboard') }}" class="btn-back mb-3">
             <i class="bi bi-arrow-left me-2"></i> Kembali ke Dashboard
         </a>
         
-        <!-- Header Card -->
         <div class="header-card">
             <h5>Detail Murid</h5>
             <h2>{{ $murid->nama_lengkap }}</h2>
@@ -253,7 +245,6 @@
             </div>
         </div>
         
-        <!-- Tab Navigation -->
         <ul class="nav nav-tabs" id="detailTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="true">
@@ -267,9 +258,8 @@
             </li>
         </ul>
         
-        <!-- Tab Content -->
         <div class="tab-content" id="detailTabsContent">
-            <!-- History Tab -->
+
             <div class="tab-pane fade show active" id="history" role="tabpanel" aria-labelledby="history-tab">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -301,8 +291,7 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Add Tab -->
+
             <div class="tab-pane fade" id="add" role="tabpanel" aria-labelledby="add-tab">
                 <div class="card">
                     <div class="card-header">
@@ -332,16 +321,10 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Initialize tab functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Get all tabs
             var triggerTabList = [].slice.call(document.querySelectorAll('#detailTabs button'))
-            
-            // Handle tab switching
             triggerTabList.forEach(function(triggerEl) {
                 var tabTrigger = new bootstrap.Tab(triggerEl)
                 

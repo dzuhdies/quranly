@@ -395,7 +395,6 @@
             color: #94A3B8;
         }
 
-        /* Modal Account Detail */
         .account-detail-item {
             margin-bottom: 16px;
         }
@@ -415,7 +414,6 @@
             border-radius: 8px;
         }
 
-        /* Mobile specific styles */
         @media (max-width: 768px) {
             .card-header {
                 padding: 14px 16px;
@@ -440,15 +438,124 @@
                 margin-bottom: 0;
             }
         }
+
+        .account-card {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.account-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.account-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.account-info {
+    flex-grow: 1;
+}
+
+.account-name {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.account-username {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 2px;
+}
+
+.account-password {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 8px;
+}
+
+.account-role {
+    min-width: 120px;
+}
+
+.search-box {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.search-box input {
+    padding-left: 35px;
+}
+
+.delete-btn {
+    white-space: nowrap;
+}
+
+.delete-form {
+    margin-left: auto;
+}
+
+@media (max-width: 576px) {
+    .account-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .account-avatar {
+        margin-bottom: 10px;
+    }
+    
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .account-role {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+    
+    .delete-form {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .delete-btn {
+        width: 100%;
+    }
+}
     </style>
 </head>
-<!-- Tambahkan ini sebelum </body> -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
         $('.select2-multiple').select2({
-            dropdownParent: $(this).closest('.modal') // ini opsional kalau dropdownnya bermasalah dalam modal
+            dropdownParent: $(this).closest('.modal')
         });
     });
 </script>
@@ -539,9 +646,6 @@
                 <div class="class-section">
                     <div class="section-title">
                         <span>Murid</span>
-                        <!-- <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambahMuridModal{{ $item->id }}">
-                            <i class="fas fa-plus me-1"></i> Tambah
-                        </button> -->
                     </div>
                     <div id="muridSection{{ $item->id }}" class="collapsible-section {{ count($item->murid) <= 3 ? 'open' : '' }}">
                         @forelse ($item->murid as $murid)
@@ -581,7 +685,6 @@
         </div>
         @endif
 
-        <!-- Account Section -->
         <div class="account-section">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="mb-0">Daftar Akun</h5>
@@ -604,21 +707,50 @@
                         <div class="account-username">{{ $user->username }}</div>
                         <div class="account-password">Password : {{ $user->password }}</div>
 
-                        <!-- Form untuk mengubah role -->
-                        <form action="{{ route('admin.ubahRole', $user->id) }}" method="POST">
-                            @csrf
-                            @method('POST')
-                            <div class="account-role">
-                                <select class="form-select form-select-sm" name="role" onchange="this.form.submit()">
-                                    <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="guru" {{ $user->role == 'guru' ? 'selected' : '' }}>Guru</option>
-                                    <option value="murid" {{ $user->role == 'murid' ? 'selected' : '' }}>Murid</option>
-                                </select>
-                            </div>
-                        </form>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <form action="{{ route('admin.ubahRole', $user->id) }}" method="POST" class="me-2">
+                                @csrf
+                                @method('POST')
+                                <div class="account-role">
+                                    <select class="form-select form-select-sm" name="role" onchange="this.form.submit()">
+                                        <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                                        <option value="guru" {{ $user->role == 'guru' ? 'selected' : '' }}>Guru</option>
+                                        <option value="murid" {{ $user->role == 'murid' ? 'selected' : '' }}>Murid</option>
+                                    </select>
+                                </div>
+                            </form>
+
+                            <form action="{{ route('admin.hapusUser', $user->id) }}" method="POST" class="delete-form">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                    data-user-name="{{ $user->nama_lengkap }}">
+                                    <i class="fas fa-trash-alt"></i> Hapus
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 @endforeach
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Penghapusan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Apakah Anda yakin ingin menghapus akun <span id="userNameToDelete"></span>?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="btn btn-danger" id="confirmDelete">Hapus</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -634,12 +766,10 @@
     </div>
     </div>
 
-    <!-- FAB Button -->
     <button class="fab-button" data-bs-toggle="modal" data-bs-target="#tambahKelasModal">
         <i class="fas fa-plus"></i>
     </button>
 
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <a href="{{ route('admin.dashboard') }}" class="bottom-nav-item {{ request()->is('admin/dashboard') ? 'active' : '' }}">
             <i class="fas fa-tachometer-alt"></i>
@@ -649,13 +779,8 @@
             <i class="fas fa-chalkboard-teacher"></i>
             <span>Kelas</span>
         </a>
-        <a href="{{ route('admin.lihatAkun') }}" class="bottom-nav-item {{ request()->is('admin/akun') ? 'active' : '' }}">
-            <i class="fas fa-users"></i>
-            <span>Akun</span>
-        </a>
     </div>
 
-    <!-- Modal Tambah Kelas -->
     <div class="modal fade" id="tambahKelasModal" tabindex="-1" aria-labelledby="tambahKelasModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -680,7 +805,6 @@
         </div>
     </div>
 
-    <!-- Modal Tambah Guru -->
     @foreach ($kelas as $item)
     <div class="modal fade" id="tambahGuruModal{{ $item->id }}" tabindex="-1" aria-labelledby="tambahGuruModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -712,7 +836,6 @@
     </div>
     @endforeach
 
-    <!-- Modal Tambah Akun -->
     <div class="modal fade" id="tambahAkunModal" tabindex="-1" aria-labelledby="tambahAkunModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -763,7 +886,6 @@
         </div>
     </div>
 
-    <!-- Modal Detail Akun -->
     <div class="modal fade" id="accountDetailModal" tabindex="-1" aria-labelledby="accountDetailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -772,7 +894,6 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="accountDetailContent">
-                    <!-- Content will be loaded via AJAX -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -786,15 +907,12 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Inisialisasi Select2 untuk multiple select
             $('.select2-multiple').select2({
                 placeholder: "Pilih murid",
                 allowClear: true,
                 width: '100%',
                 dropdownParent: $('.select2-multiple').closest('.modal')
             });
-
-            // Tampilkan notifikasi sukses
             @if(session('success'))
             setTimeout(function() {
                 $('.alert-success').fadeOut('slow');
@@ -807,7 +925,6 @@
             }, 5000);
             @endif
 
-            // Search functionality
             $('#searchAccount').on('keyup', function() {
                 const searchText = $(this).val().toLowerCase();
                 $('#accountList .account-card').each(function() {
@@ -822,7 +939,6 @@
             });
         });
 
-        // Toggle murid list
         function toggleMurid(classId) {
             const section = document.getElementById('muridSection' + classId);
             const icon = document.getElementById('toggleIcon' + classId);
@@ -832,12 +948,7 @@
             icon.classList.toggle('fa-chevron-up');
         }
 
-        // Show account detail
         function showAccountDetail(userId) {
-            // You can load the detail via AJAX or use data attributes
-            // Here's a simple example using data attributes (you'll need to modify your controller to provide this data)
-
-            // For now, we'll just show a simple modal
             $.get(`/admin/akun/${userId}`, function(data) {
                 $('#accountDetailContent').html(`
                     <div class="account-detail-item">
@@ -864,6 +975,49 @@
                 $('#accountDetailModal').modal('show');
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Delete confirmation
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+    const userNameSpan = document.getElementById('userNameToDelete');
+    let formToDelete = null;
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const userName = this.getAttribute('data-user-name');
+            userNameSpan.textContent = userName;
+            formToDelete = this.closest('.delete-form');
+            deleteModal.show();
+        });
+    });
+
+    document.getElementById('confirmDelete').addEventListener('click', function() {
+        if (formToDelete) {
+            formToDelete.submit();
+        }
+        deleteModal.hide();
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('searchAccount');
+    const accountCards = document.querySelectorAll('.account-card');
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        accountCards.forEach(card => {
+            const name = card.querySelector('.account-name').textContent.toLowerCase();
+            const username = card.querySelector('.account-username').textContent.toLowerCase();
+            
+            if (name.includes(searchTerm) || username.includes(searchTerm)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+});
     </script>
 </body>
 

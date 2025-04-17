@@ -33,7 +33,7 @@ class GuruController extends Controller
         $pencapaianGuru = Pencapaian::where('user_id', $guru->id)->get();
 
         $nama_kelas = $guru->kelas ? $guru->kelas->nama_kelas : null;
-        $nama_lengkap = $guru->nama_lengkap;  // Menambahkan nama_lengkap
+        $nama_lengkap = $guru->nama_lengkap;
 
         return view('guru.dashboard', compact('data', 'targetHalaman', 'totalHalamanGuru', 'pencapaianGuru', 'nama_kelas', 'nama_lengkap'));
     }

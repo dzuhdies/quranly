@@ -19,6 +19,8 @@ class MuridController extends Controller
 
         $totalHalaman = $pencapaian->sum('jumlah_halaman');
 
+        $nama_kelas = $user->kelas ? $user->kelas->nama_kelas : null;
+
         $kelas = \App\Models\Kelas::find($user->kelas_id);
         $targetHalaman = $kelas ? $kelas->target_halaman : 0;
 
@@ -39,7 +41,7 @@ class MuridController extends Controller
             'totalHalaman',
             'targetHalaman',
             'sudahMencapaiTarget',
-            'temanSekelas'
+            'temanSekelas', 'nama_kelas'
         ));
     }
 
@@ -65,8 +67,6 @@ class MuridController extends Controller
     public function hapusPencapaian($id)
     {
         $p = Pencapaian::findOrFail($id);
-
-        // Pastikan hanya milik sendiri
         if ($p->user_id == Session::get('user')->id) {
             $p->delete();
             return back()->with('success', 'Pencapaian berhasil dihapus!');
