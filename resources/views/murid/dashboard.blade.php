@@ -347,7 +347,7 @@
 <body>
     <nav class="navbar navbar-dark">
         <div class="container">
-            <span class="navbar-brand">Quranly</span>
+            <span class="navbar-brand">Rumah Quran Ar-Rahman</span>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                 @csrf
                 <button type="submit" class="btn btn-outline-light logout-btn">
@@ -360,7 +360,7 @@
 
     <div class="container">
         <div id="dashboard-section" class="dashboard-section">
-            <h1 class="app-title">Halo, {{ $user->nama_lengkap }}</h1>
+            <h2 class="app-title">Assalamualaikum {{ $user->nama_lengkap }}</h2>
             @if (session('success'))
             <div class="alert alert-success">
                 <i class="fas fa-check-circle me-2"></i>{{ session('success') }}

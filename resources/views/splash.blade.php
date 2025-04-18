@@ -32,7 +32,6 @@
 </head>
 <body>
   <img src="{{ asset('images/image.png') }}" alt="Logo" class="fade-in" />
-  <p class="fade-in">Quranly</p>
 
   <audio id="introAudio" autoplay>
     <source src="{{ asset('audio/intro.mp4') }}" type="audio/mpeg">
